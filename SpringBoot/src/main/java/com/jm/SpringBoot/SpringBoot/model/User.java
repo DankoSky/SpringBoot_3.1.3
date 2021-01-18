@@ -1,16 +1,15 @@
 package com.jm.SpringBoot.SpringBoot.model;
 
 
-
+import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 
-
+@Data
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
@@ -33,39 +32,8 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
-    private Set<Role> roles= new LinkedHashSet<>();
+    private List<Role> roles;
 
-    public User() {
-    }
-
-    public User(long id, String username, int age, String password, Set<Role> roles) {
-        this.id = id;
-        this.username = username;
-        this.age = age;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-
-    public void setUsername(String name) {
-        this.username = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,15 +41,14 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return password;
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                ", password='" + password + '\'' +
+                '}';
     }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
 
     @Override
     public boolean isAccountNonExpired() {
@@ -103,16 +70,6 @@ public class User implements UserDetails {
         return true;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }
