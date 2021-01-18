@@ -25,53 +25,34 @@ public class LoginController {
 
 
     @GetMapping("/admin")
-    public String index1(Model model) {
+    public String index1(@ModelAttribute User user, Model model) {
+        User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        model.addAttribute("admin", admin);
         model.addAttribute("users", userService.getAllUsers());
+        List<Role> allRoles = userService.getRoles();
+        model.addAttribute("allRoles", allRoles);
         return "admin";
     }
 
 
-    @PostMapping(value = "admin/user/new")
-    public String create(@ModelAttribute("user") User user) {
+    @PostMapping("admin/new")
+    public String newUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/admin";
     }
 
 
-    @GetMapping("/user/{id}")
-    public String show(Model model, @PathVariable("id") long id) {
-        User currentuser = (User) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        if(currentuser.getId()!=id&&currentuser.getRoles().stream().noneMatch((x->x.getName().contains("ROLE_ADMIN")))){
-            return "redirect:/user/" + currentuser.getId();
-        }
+    @PostMapping("/admin/edit/{id}")
+    public String edit(Model model, @PathVariable("id") long id, User user) {
         model.addAttribute("user", userService.show(id));
-        return "user";
-    }
-
-
-    @GetMapping("admin/user/new")
-    public String newUser(@ModelAttribute("user") User user, Model model) {
+        model.addAttribute("user", user);
         List<Role> allRoles = userService.getRoles();
         model.addAttribute("allRoles", allRoles);
-        return "new";
-    }
-
-
-    @RequestMapping(value = "/admin/edit/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public String edit(@PathVariable("id") Long id, @ModelAttribute("user") User user) {
-        userService.update(id, user);
+        userService.save(user);
         return "redirect:/admin";
+
     }
 
-    @GetMapping("/admin/user/edit/{id}")
-    public String editforadmin(Model model, @PathVariable("id") long id) {
-        model.addAttribute("user", userService.show(id));
-        List<Role> allRoles = userService.getRoles();
-        model.addAttribute("allRoles", allRoles);
-        return "edit";
-    }
 
 
     @GetMapping("admin/{id}")
@@ -79,4 +60,6 @@ public class LoginController {
         userService.delete(id);
         return "redirect:/admin";
     }
+
+
 }
