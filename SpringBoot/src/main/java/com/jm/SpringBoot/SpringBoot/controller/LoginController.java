@@ -34,13 +34,11 @@ public class LoginController {
         return "admin";
     }
 
-
     @PostMapping("admin/new")
     public String newUser(@ModelAttribute("user") User user) {
         userService.save(user);
         return "redirect:/admin";
     }
-
 
     @PostMapping("/admin/edit/{id}")
     public String edit(Model model, @PathVariable("id") long id, User user) {
@@ -53,13 +51,9 @@ public class LoginController {
 
     }
 
-
-
     @GetMapping("admin/{id}")
     public String delete(@PathVariable("id") long id) {
         userService.delete(id);
         return "redirect:/admin";
     }
-
-
 }
