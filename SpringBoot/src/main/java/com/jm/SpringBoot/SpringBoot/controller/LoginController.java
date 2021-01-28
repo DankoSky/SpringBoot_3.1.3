@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
 public class LoginController {
 
     private final UserService userService;
@@ -22,9 +21,7 @@ public class LoginController {
     public LoginController(UserService userService) {
         this.userService = userService;
     }
-
-
-    @GetMapping("/admin")
+    @GetMapping
     public String index1(@ModelAttribute User user, Model model) {
         User admin = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("admin", admin);
@@ -34,26 +31,4 @@ public class LoginController {
         return "admin";
     }
 
-    @PostMapping("admin/new")
-    public String newUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/admin/edit/{id}")
-    public String edit(Model model, @PathVariable("id") long id, User user) {
-        model.addAttribute("user", userService.show(id));
-        model.addAttribute("user", user);
-        List<Role> allRoles = userService.getRoles();
-        model.addAttribute("allRoles", allRoles);
-        userService.save(user);
-        return "redirect:/admin";
-
-    }
-
-    @GetMapping("admin/{id}")
-    public String delete(@PathVariable("id") long id) {
-        userService.delete(id);
-        return "redirect:/admin";
-    }
 }

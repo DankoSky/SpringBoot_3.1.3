@@ -82,6 +82,7 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-tx:5.3.3" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aspects:5.3.3" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.22" />
+          <element id="library" level="project" name="Maven: org.mapstruct:mapstruct:1.4.1.Final" />
         </element>
       </element>
       <element id="directory" name="META-INF">
